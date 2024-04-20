@@ -1,2 +1,2 @@
-# CP
+# CP stuff
 competitive programming
