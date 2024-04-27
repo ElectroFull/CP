@@ -1,0 +1,64 @@
+#include <bits/stdc++.h>
+#include <ext/pb_ds/assoc_container.hpp>
+#pragma GCC optimize("Ofast")
+#pragma GCC target("sse,sse2,sse3,ssse3,sse4.1,sse4.2,avx,avx2")
+
+using namespace std;
+
+mt19937 rng(std::chrono::steady_clock::now().time_since_epoch().count());
+
+using ll = long long;
+
+void solve() {
+  ll n;
+  cin >> n;
+  vector<ll> ar(n);
+  for (auto &i : ar)
+    cin >> i;
+  sort(ar.begin(), ar.end());
+  ar.resize(unique(ar.begin(), ar.end()) - ar.begin());
+  n = ar.size();
+  if (n < 4) {
+    cout << (ar[0] / 4) * (ar[0] / 4 + 1) / 2 << '\n';
+    return;
+  }
+  ll ans = 0;
+  set<ll> candidates;
+  for (ll i = 0; i < 4; ++i) {
+    for (ll j = i + 1; j < 4; ++j) {
+      ll x = abs(ar[i] - ar[j]);
+      for (ll k = 1; k * k <= x; ++k) {
+        if (x % k == 0) {
+          candidates.insert(k);
+          if (x / k != k)
+            candidates.insert(x / k);
+        }
+      }
+    }
+  }
+  for (auto &L : candidates) {
+    if (L > ar[0] / 4)
+      break;
+    set<ll> mods;
+    for (ll j = 0; j < n; ++j) {
+      mods.insert(ar[j] % L);
+      if (mods.size() >= 4) {
+        break;
+      }
+    }
+    ans += ((mods.size() <= 3) * L);
+  }
+  cout << ans << '\n';
+}
+
+signed main() {
+  ios::sync_with_stdio(false);
+  cin.tie(nullptr);
+  cerr.tie(nullptr);
+  int t = 1;
+  // cin >> t;
+  while (t--) {
+    solve();
+  }
+  return 0;
+}
